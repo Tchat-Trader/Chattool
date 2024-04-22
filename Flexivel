@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <style>
+        /* Styles CSS */
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Header styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Main content styles */
+        main {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .profile-column {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .chat-column {
+            flex: 2;
+            padding: 0 10px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        /* Footer styles */
+        footer {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+        }
+
+        #message {
+            flex: 1;
+            height: 40px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        #send {
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="profile">
+            <img src="profile_picture.jpg" alt="Profile Picture">
+            <span>Username</span>
+        </div>
+        <div class="options">
+            <a href="#">Statistics</a>
+            <a href="#">Logout</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Client Profile -->
+        <div class="profile-column">
+            <!-- Client Information -->
+            <h2>Client Profile</h2>
+            <!-- Client details -->
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-column">
+            <!-- Chat messages -->
+            <div class="message">Client message</div>
+            <div class="message">Player message</div>
+        </div>
+
+        <!-- Player Profile -->
+        <div class="profile-column">
+            <!-- Player Information -->
+            <h2>Player Profile</h2>
+            <!-- Player details -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <textarea id="message" placeholder="Type your message..."></textarea>
+        <button id="send">Send</button>
+    </footer>
+
+    <!-- Script JavaScript -->
+    <script>
+        // Script to handle sending messages
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message.length >= 70) {
+                sendMessage(message);
+            } else {
+                alert('Message should be at least 70 characters long.');
+            }
+        });
+
+        function sendMessage(message) {
+            // Function to send message to client
+            fetch('/send_message', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'message': message
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Message sent successfully.');
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
